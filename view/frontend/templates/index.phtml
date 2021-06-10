@@ -1,0 +1,12 @@
+<?php
+/** @var \AHT\CustomCheckout\Block\Template $block */
+?>
+
+<div class="template">
+    <?php
+        $block->getCheckoutSession()->setTestDate("chào");
+        $block->getCheckoutSession()->setTestComment("chào đây là comment");
+        echo $block->getCheckoutSession()->getTestDate();
+        echo $block->getCheckoutSession()->getTestComment();
+    ?>
+</div>

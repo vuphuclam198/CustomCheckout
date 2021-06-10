@@ -1,0 +1,24 @@
+<?php
+/** @var \AHT\CustomCheckout\Block\Template $block */
+?>
+<?php
+    $data = $block->getId();
+ ?>
+<div class="template">
+    <table class="table-admin-checkout">
+        <tr>
+            <th>thời gian giao hàng</th>
+            <th>nội dung khách hàng</th>
+            <th>Action</th>
+        </tr>
+
+        <tr>
+            <td><?= $block->getProduct()->getDeliveryDate() ?></td>
+            <td><?= $block->getProduct()->getDeliveryComment() ?></td>
+            <td>
+            <div class="action"><?php echo $block->getDeliveryEditLink() ?></div>
+            </td>
+        </tr>
+    </table>
+
+</div>
