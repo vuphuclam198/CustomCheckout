@@ -8,6 +8,7 @@ namespace AHT\CustomCheckout\Block\Adminhtml\Order;
  */
 class Delivery extends \Magento\Backend\Block\Widget\Form\Container
 {
+    protected $request;
     /**
      * Core registry
      *
@@ -23,8 +24,10 @@ class Delivery extends \Magento\Backend\Block\Widget\Form\Container
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Request\Http $request,
         array $data = []
     ) {
+        $this->request = $request;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -61,6 +64,11 @@ class Delivery extends \Magento\Backend\Block\Widget\Form\Container
         return __('Edit Order %1 %2 Address', $orderId, $type);
     }
 
+    protected function getId() {
+        $id = $this->request->getParam('order_id');
+        return $id;
+    }
+
     /**
      * Back button url getter
      *
@@ -69,7 +77,7 @@ class Delivery extends \Magento\Backend\Block\Widget\Form\Container
     public function getBackUrl()
     {
         $address = $this->_coreRegistry->registry('order_delivery');
-        return $this->getUrl('sales/*/view', ['order_id' => $address ? $address->getOrder()->getId() : null]);
+        return $this->getUrl('sales/*/view', ['order_id' => $this->getId() ? $this->getId() : null]);
     }
 }
 
