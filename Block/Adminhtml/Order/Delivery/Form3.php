@@ -90,10 +90,10 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
      *
      * @return \Magento\Sales\Model\Order\Address
      */
-    protected function _getAddress()
-    {
-        return $this->_coreRegistry->registry('order_address');
-    }
+    // protected function _getAddress()
+    // {
+    //     return $this->_coreRegistry->registry('order_address');
+    // }
 
     /**
      * Define form attributes (id, method, action)
