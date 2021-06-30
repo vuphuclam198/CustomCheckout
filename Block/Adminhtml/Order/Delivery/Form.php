@@ -8,14 +8,14 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Delivery
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
 {
     /**
      * Address form template
      *
      * @var string
      */
-    protected $_template = 'AHT_CustomCheckout::delivery/form.phtml';
+    protected $_template = 'AHT_CustomCheckout::delivery_form.phtml';
 
     /**
      * Core registry
@@ -23,7 +23,10 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
-
+    /**
+     * @param \Magento\Sales\Model\Order
+     */
+    private $_order;
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
@@ -61,10 +64,11 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Framework\Registry $registry,
+        \Magento\Sales\Model\Order $order,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
-
+        $this->_order = $order;
         parent::__construct(
             $context,
             $sessionQuote,
@@ -72,15 +76,6 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
             $priceCurrency,
             $formFactory,
             $dataObjectProcessor,
-            $directoryHelper,
-            $jsonEncoder,
-            $customerFormFactory,
-            $options,
-            $addressHelper,
-            $addressService,
-            $criteriaBuilder,
-            $filterBuilder,
-            $addressMapper,
             $data
         );
     }
@@ -90,10 +85,10 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
      *
      * @return \Magento\Sales\Model\Order\Address
      */
-    protected function _getAddress()
-    {
-        return $this->_coreRegistry->registry('order_address');
-    }
+    // protected function _getAddress()
+    // {
+    //     return $this->_coreRegistry->registry('order_address');
+    // }
 
     /**
      * Define form attributes (id, method, action)
@@ -102,11 +97,35 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
      */
     protected function _prepareForm()
     {
-        parent::_prepareForm();
+        $fieldset = $this->_form->addFieldset('main', ['no_container' => true]);
+        $fieldset->addField(
+            'delivery_date',
+            'date',
+            [
+                'name' => 'date',
+                'label' => __('Delivery date'),
+                'value' => $this->getOrder()->getDeliveryDate(),
+                'date_format' => 'yyyy-MM-dd',
+            ]
+        );
+        $fieldset->addField(
+            'delivery_comment',
+            'textarea',
+            [
+                'name' => 'comment',
+                'label' => __('Delivery comment'),
+                'value' => $this->getOrder()->getDeliveryComment(),
+                'rows' =>10,
+                'disabled' => 'disabled'
+                
+                
+            ]
+        );
+        
         $this->_form->setId('edit_form');
         $this->_form->setMethod('post');
         $this->_form->setAction(
-            $this->getUrl('sales/*/addressSave', ['address_id' => $this->_getAddress()->getId()])
+            $this->getUrl('sales/*/save', ['id' =>$this->getOrderId()])
         );
         $this->_form->setUseContainer(true);
 
@@ -128,16 +147,16 @@ class Form extends \AHT\CustomCheckout\Block\Adminhtml\Order\Create\Form\Deliver
      *
      * @return array
      */
-    public function getFormValues()
-    {
-        return $this->_getAddress()->getData();
-    }
 
-    /**
-     * @inheritDoc
-     */
-    protected function getAddressStoreId()
+    public function getOrderId()
     {
-        return $this->_getAddress()->getOrder()->getStoreId();
+        return $this->getRequest()->getParam('order_id');
     }
+    public function getOrder()
+    {
+        $id = $this->getOrderId();
+        $order = $this->_order->load($id);
+        return $order;
+    }
+    
 }

@@ -2,6 +2,15 @@
 /** @var \AHT\CustomCheckout\Block\Template $block */
 ?>
 
-<div class="template">
-    <h1><?=$block->getName()?></h1>
+<div class="message message-notice">
+    <div class="message-inner">
+        <div class="message-content"><?= $block->escapeHtml(__('Changing address information will not recalculate shipping, tax or other order amount.')) ?></div>
+    </div>
 </div>
+
+<fieldset class="fieldset admin__fieldset-wrapper">
+
+    <div class="form-inline" data-mage-init='{"AHT_CustomCheckout/order/edit/address/form":{}}'>
+        <?= $block->getForm()->toHtml() ?>
+    </div>
+</fieldset>
