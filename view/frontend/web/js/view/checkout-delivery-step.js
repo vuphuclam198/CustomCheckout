@@ -32,7 +32,7 @@ define(
             //step code will be used as step content id in the component template
             stepCode: 'isLogedCheck',
             //step title value
-            stepTitle: 'Logging Status',
+            stepTitle: 'Step New',
             deliveyDate: ko.observable(),
             deliveryComment: ko.observable(),
             /**

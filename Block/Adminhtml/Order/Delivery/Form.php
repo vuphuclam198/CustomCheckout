@@ -102,7 +102,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
             'delivery_date',
             'date',
             [
-                'name' => 'date',
+                'name' => 'delivery_date',
                 'label' => __('Delivery date'),
                 'value' => $this->getOrder()->getDeliveryDate(),
                 'date_format' => 'yyyy-MM-dd',
@@ -112,7 +112,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
             'delivery_comment',
             'textarea',
             [
-                'name' => 'comment',
+                'name' => 'delivery_comment',
                 'label' => __('Delivery comment'),
                 'value' => $this->getOrder()->getDeliveryComment(),
                 'rows' =>10,
@@ -125,7 +125,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
         $this->_form->setId('edit_form');
         $this->_form->setMethod('post');
         $this->_form->setAction(
-            $this->getUrl('sales/*/save', ['id' =>$this->getOrderId()])
+            $this->getUrl('delivery/*/save', ['order_id' =>$this->getOrderId()])
         );
         $this->_form->setUseContainer(true);
 
